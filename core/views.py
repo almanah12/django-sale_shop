@@ -15,7 +15,7 @@ def checkout(request):
 
 class HomeView(ListView):
     model = Product
-    paginate_by = 3
+    paginate_by = 1
     template_name = 'home.html'
 
 
