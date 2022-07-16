@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <main>
+    <div class="container">
+      <div class="table-responsive text-nowrap">
+        <h2>Корзина</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Название товара</th>
+              <th scope="col">Цена</th>
+              <th scope="col">Количество</th>
+              <th scope="col">Сумма заказа</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for  order_product in object.products.all%}
+            <tr>
+              <th scope="row">1</th>
+              <td>{{order_product.product.title}}</td>
+              <td>{{order_product.product.price}}</td>
+              <td>{{order_product.quantity}}</td>
+              <td>
+                {% if  order_product.product.discount_price%}
+                    {{ order_product.get_total_product_discount_price }} тг.
+                    <span class="badge badge-primary">Скидка {{order_product.get_amount_saved }} тг.</span>
+                {% else %}
+                    {{ order_product.get_total_product_price }} тг.
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="4">Order Total</td>
+            <td >{{object.get_total}} тг.</td>
+          </tr>
+          <tr>
+            <td colspan="5">
+              <a class="btn btn-warning float-right ml-2" href="{%url 'core:checkout'%}">Перейти к оплате</a>
+              <a class="btn btn-primary float-right" href="/">Продолжить  покупку</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </main>
+{% endblock content %}
+
+
