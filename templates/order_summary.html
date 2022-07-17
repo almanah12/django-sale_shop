@@ -19,30 +19,50 @@
           <tbody>
           {% for  order_product in object.products.all%}
             <tr>
-              <th scope="row">1</th>
+              <th scope="row">{{forloop.counter}}</th>
               <td>{{order_product.product.title}}</td>
               <td>{{order_product.product.price}}</td>
-              <td>{{order_product.quantity}}</td>
               <td>
-                {% if  order_product.product.discount_price%}
+                <a href="{% url 'core:remove-single-product-from-cart' order_product.product.slug %}"><i class="fas fa-minus mr-2"></i></a>
+                {{order_product.quantity}}
+                <a href="{% url 'core:add-to-cart' order_product.product.slug %}"><i class="fas fa-plus ml-2"></i></a>
+              </td>
+              <td>
+                {% if  order_product.product.discount_price %}
                     {{ order_product.get_total_product_discount_price }} тг.
                     <span class="badge badge-primary">Скидка {{order_product.get_amount_saved }} тг.</span>
                 {% else %}
                     {{ order_product.get_total_product_price }} тг.
                 {% endif %}
+                <a style="color:red" href="{% url 'core:remove-from-cart' order_product.product.slug %}">
+                  <i class="fas fa-trash float-right"></i>
+                </a>
+
               </td>
             </tr>
-          {% endfor %}
+          {% empty %}
           <tr>
-            <td colspan="4">Order Total</td>
-            <td >{{object.get_total}} тг.</td>
+            <td colspan="5">Ваша корзина пуста</td>
           </tr>
           <tr>
             <td colspan="5">
-              <a class="btn btn-warning float-right ml-2" href="{%url 'core:checkout'%}">Перейти к оплате</a>
-              <a class="btn btn-primary float-right" href="/">Продолжить  покупку</a>
+              <a class="btn btn-primary float-right" href="/">Продолжать покупку</a>
             </td>
           </tr>
+          {% endfor %}
+          {% if object.get_total %}
+            <tr>
+              <td colspan="4">Order Total</td>
+              <td >{{object.get_total}} тг.</td>
+            </tr>
+            <tr>
+              <td colspan="5">
+                <a class="btn btn-warning float-right ml-2" href="{%url 'core:checkout'%}">Перейти к оплате</a>
+                <a class="btn btn-primary float-right" href="{% url 'core:home'%} ">Продолжить  покупку</a>
+              </td>
+            </tr>
+          {% endif %}
+
           </tbody>
         </table>
 
